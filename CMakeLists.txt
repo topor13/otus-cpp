@@ -10,10 +10,12 @@ set(WITH_GOOGLE_TESTS ON)
 
 configure_file(version.h.in version.h)
 
+add_executable(ip_filter ip_filter.cpp ip_filter.hpp)
+
 add_executable(helloworld_cli main.cpp)
 add_library(helloworld lib.cpp)
 
-set_target_properties(helloworld_cli helloworld PROPERTIES
+set_target_properties(helloworld_cli helloworld ip_filter PROPERTIES
     CXX_STANDARD 14
     CXX_STANDARD_REQUIRED ON
 )
@@ -90,6 +92,9 @@ if (MSVC)
         )
     endif()
 else ()
+    target_compile_options(ip_filter PRIVATE
+        -Wall -Wextra -pedantic -Werror
+    )
     target_compile_options(helloworld_cli PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
@@ -103,7 +108,7 @@ else ()
     endif()
 endif()
 
-install(TARGETS helloworld_cli RUNTIME DESTINATION bin)
+install(TARGETS ip_filter RUNTIME DESTINATION bin)
 
 set(CPACK_GENERATOR DEB)
 set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
@@ -120,4 +125,8 @@ endif()
 if(WITH_GOOGLE_TESTS)
     enable_testing()
     add_test(checkVersion g_otus_cpp_tests)
+    add_test(compareIp g_otus_cpp_tests)
+    add_test(filterIp g_otus_cpp_tests)
+    add_test(printIp g_otus_cpp_tests)
+    add_test(sortIp g_otus_cpp_tests)
 endif()
