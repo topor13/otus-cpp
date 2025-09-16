@@ -10,10 +10,12 @@ set(WITH_GOOGLE_TESTS ON)
 
 configure_file(version.h.in version.h)
 
+add_executable(ip_filter ip_filter.cpp ip_filter.hpp)
+
 add_executable(helloworld_cli main.cpp)
 add_library(helloworld lib.cpp)
 
-set_target_properties(helloworld_cli helloworld PROPERTIES
+set_target_properties(helloworld_cli helloworld ip_filter PROPERTIES
     CXX_STANDARD 14
     CXX_STANDARD_REQUIRED ON
 )

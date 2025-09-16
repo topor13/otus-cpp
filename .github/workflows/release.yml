@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - master
-      - homework01
+      - develop
 
 jobs:
   build:
@@ -14,7 +14,7 @@ jobs:
         with:
           submodules: true
       - run: sudo apt-get update && sudo apt-get install libboost-test-dev -y
-      - run: cmake . -DPATCH_VERSION=${{ github.run_number }} -DWITH_BOOST_TEST=ON -DWITH_GOOGLE_TESTS=ON
+      - run: cmake . -DPATCH_VERSION=${{ github.run_number }} -DWITH_BOOST_TEST=OFF -DWITH_GOOGLE_TESTS=ON
       - run: cmake --build .
       - run: cmake --build . --target test
       - run: cmake --build . --target package
@@ -35,6 +35,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./helloworld-0.0.${{ github.run_number }}-Linux.deb
-          asset_name: helloworld-0.0.${{ github.run_number }}-Linux.deb
+          asset_path: ./otuscpp-0.0.${{ github.run_number }}-Linux.deb
+          asset_name: otuscpp-0.0.${{ github.run_number }}-Linux.deb
           asset_content_type: application/vnd.debian.binary-package
