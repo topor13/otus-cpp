@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <regex>
 
 #pragma once
 
@@ -32,24 +33,48 @@ std::vector<std::string> split(const std::string &str, char d)
     return r;
 }
 
-bool compare_ip(const std::vector<std::string>& first_ip, const std::vector<std::string>& second_ip)
+bool is_integer(const std::string & s){
+    return std::regex_match(s, std::regex("[0-9]+"));
+}
+
+short str_to_octet(const std::string &str)
+{
+    if (!is_integer(str)) {
+        return -3;
+    }
+    short oct;
+    try {
+        oct = std::stoi(str); // Преобразование в int
+    } catch (const std::exception& e) {
+        //std::cerr << "Неверный формат октета! Ошибка: " << e.what() << std::endl;
+        return -2;
+    }
+    if (oct >=0 && oct < 256) {
+        return oct;
+    } else {
+        //std::cerr << "Неверный формат октета! Значение должно быть в диапазоне 0-255, получено значение \"" << oct << "\"" << std::endl;
+        return -1;
+    }
+}
+
+bool compare_ip(const std::vector<short>& first_ip, const std::vector<short>& second_ip)
 {
     for (size_t i = 0; i < 4; ++i) {
-        if (std::stoi(first_ip[i]) != std::stoi(second_ip[i])) {
-            return std::stoi(first_ip[i]) > std::stoi(second_ip[i]);
+        if (first_ip[i] != second_ip[i]) {
+            return first_ip[i] > second_ip[i];
         }
     }
     return false;
 }
 
-bool filter_ip(const std::vector<std::string> ip, int filter, int position = 4)
+bool filter_ip(const std::vector<short> ip, int filter, int position = 4)
 {
     if (position < 4 && position >= 0) {
-        return std::stoi(ip[position]) == filter;
+        return ip[position] == filter;
          
     } else {
         for (size_t i = 0; i < 4; ++i) {
-            if (std::stoi(ip[i]) == filter) {
+            if (ip[i] == filter) {
                 return true;
             }
         }
@@ -58,7 +83,7 @@ bool filter_ip(const std::vector<std::string> ip, int filter, int position = 4)
     return false;
 }
 
-void print_ip(std::vector<std::vector<std::string>>::const_iterator ip) {
+void print_ip(std::vector<std::vector<short>>::const_iterator ip) {
     for(auto ip_part = ip->cbegin(); ip_part != ip->cend(); ++ip_part)
     {
         if (ip_part != ip->cbegin())
