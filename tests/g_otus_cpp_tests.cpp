@@ -4,7 +4,7 @@
 #include "lib.h"
 #include "ip_filter.hpp"
 
-std::vector<std::vector<std::string>> ips = {{"10","11","12","13"},{"10","12","11","13"},{"13","11","12","10"},{"100","11","12","13"}};
+std::vector<std::vector<short>> ips = {{10,11,12,13},{10,12,11,13},{13,11,12,10},{100,11,12,13}};
 
 int main(int argc, char** argv) {
     testing::InitGoogleTest(&argc, argv);
@@ -51,5 +51,5 @@ TEST(OtusCppTest, printIp) {
 
 TEST(OtusCppTest, sortIp) {
     std::sort(ips.begin(), ips.end(), compare_ip);
-    ASSERT_EQ(ips[0][0], "100");
+    ASSERT_EQ(ips[0][0], 100);
 }

@@ -10,12 +10,36 @@ int main(int, char **)
 {
     try
     {
-        std::vector<std::vector<std::string> > ip_pool;
+        std::vector<std::vector<short>> ip_pool;
 
         for(std::string line; std::getline(std::cin, line);)
         {
             std::vector<std::string> v = split(line, '\t');
-            ip_pool.push_back(split(v.at(0), '.'));
+            std::vector<std::string> tmp_octets_str = split(v.at(0), '.');
+            std::vector<short> tmp_octets_short;
+            short tmp_oct;
+            bool incorrect_ip = false;
+
+            if(tmp_octets_str.size() > 4) {
+                std::cerr << "ip must contain 4 digit!" << std::endl;
+                continue;
+            }
+
+            for (auto oct = tmp_octets_str.cbegin(); oct != tmp_octets_str.cend(); ++oct)
+            {
+                tmp_oct = str_to_octet(*oct);
+                if (tmp_oct < 0) {
+                    incorrect_ip = true;
+                    break;
+                } else {
+                    tmp_octets_short.push_back(tmp_oct);
+                }
+            }
+            if (incorrect_ip) {
+                std::cerr << "Wrong format of address! Must be four digit 0-255 delimit dot." << std::endl;
+                continue;
+            }
+            ip_pool.push_back(tmp_octets_short);
         }
 
         std::sort(ip_pool.begin(), ip_pool.end(), compare_ip);
