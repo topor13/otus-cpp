@@ -20,7 +20,7 @@ if (MSVC)
     )
 else ()
     target_compile_options(my_allocator PRIVATE
-        -Wall -Wextra -pedantic -Werror
+        -Wall -Wextra -Werror -fno-permissive
     )
 endif()
 

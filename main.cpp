@@ -1,30 +1,7 @@
 #include <iostream>
 #include <map>
 #include "my_list.cpp"
-
-template <typename T>
-class MyFirstAllocator{
-    public:
-    using value_type = T;
-
-    T* allocate(size_t n) {
-        return static_cast<T*>(::operator new(n* sizeof(T)));
-    }
-
-    void deallocate(T* p, size_t n) {
-        (void) n;
-        ::operator delete(p);
-    }
-
-    template <typename U>
-    struct rebind {
-        using other = MyFirstAllocator<U>;
-    };
-
-    void destroy(T* p) {
-        p->~T();
-    }
-};
+#include "my_alloc.cpp"
 
 size_t factorial(size_t fac) {
     size_t res = 1;
@@ -55,7 +32,7 @@ int main()
     }
     
     // create map with my custom allocator
-    std::map<int, int, std::less<int>, MyFirstAllocator<std::pair<int, int>>> my_map;
+    std::map<int, int, std::less<int>, MyFirstAllocator<std::pair<int, int>, 10>> my_map;
     std::cout << "create custom std::map<int, int>" << std::endl;
     for (size_t i = 0; i < 10; i++)
     {
@@ -79,7 +56,7 @@ int main()
     }
 
     //create my custom list container with my custom allocator
-    ListContainer<int, MyFirstAllocator<int>> my_alloc_list;
+    ListContainer<int, MyFirstAllocator<int, 10>> my_alloc_list;
     std::cout << "create custom list with custom allocator" << std::endl;
     for (size_t i = 0; i < 10; i++)
     {
