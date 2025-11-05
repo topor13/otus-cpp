@@ -1,7 +1,7 @@
 #include <iostream>
 #include <map>
-#include "my_list.cpp"
-#include "my_alloc.cpp"
+#include "my_list.hpp"
+#include "my_alloc.hpp"
 
 size_t factorial(size_t fac) {
     size_t res = 1;
