@@ -5,7 +5,7 @@ on:
     branches:
       - master
       - develop
-      - homework03
+      - homework04
 
 jobs:
   build:
